@@ -1,8 +1,8 @@
 #define NO_MONTH    12
 #define NO_DAY      7
 #define LOW_BOUND_YEAR 1800
-#define LEAP 100
-#define NOT_LEAP 101
+#define LEAP 1
+#define NOT_LEAP 0
 #define ERR -1
 
 enum month_num {JAN=0, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC};
@@ -11,6 +11,7 @@ const char* month_const_str[] =   {"JAN", "FEB", "MAR", "APR", "MAY", "JUN",
                              "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
 
 const int month_const[] = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4}; // JAN - DEC, FEB_LeapYear
+const int month_limit[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 enum day_num {SUN=0, MON, TUE, WED, THU, FRI, SAT};
 

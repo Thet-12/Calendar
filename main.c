@@ -14,9 +14,11 @@ int isLeapYear(const int year);
 int year_num(const char* year_str);
 int month_num(const char* month_str);
 int date_num(const int month, const char* date_str);
+int calc_day(const int year, const int month, const int date);
 void print_date(const int year, const int month, const int date);
 void print_month(const int year, const int month);
 void print_year(const int year);
+void print_help(void);
 
 int main(const int argc, const char* argv[])
 {
@@ -124,25 +126,57 @@ int date_num(const int month, const char* date_str)
     return  date;
 }
 
-void print_date(const int year, const int month, const int date)
+int calc_day(const int year, const int month, const int date)
 {
-    int leap_flag = isLeapYear(year);
     int year_cal = (month<2) ? year-1 : year; 
     int day = (year_cal +(year_cal/4) -(year_cal/100) +(year_cal/400) +month_const[month] +date) % 7;
+    return day;
+}
+
+void print_date(const int year, const int month, const int date)
+{
+    int day = calc_day(year, month, date);
     system("echo \x1B[92m");
-    printf("DD\tMM\tYYYY\n");
-    printf("%2d\t%2d\t%4d\t(%s)",date,month+1,year,day_const_str[day]);
-    if(leap_flag == LEAP)
-        printf("\t(Leap year)");
+    printf("%4s%4s%6s\n","DD","MM","YYYY");
+    printf("%4d%4d%6d  (%s)",date,month+1,year,day_const_str[day]);
+    if(isLeapYear(year))
+        printf("  (Leap year)");
     system("echo \x1B[0m");
 }
 
 void print_month(const int year, const int month)
 {
-    printf("Later\n");
+    int space;
+    int first_day = calc_day(year, month, 1);
+    int leap_year = isLeapYear(year);
+    system("echo \x1B[92m");
+    printf("%20s%15d\n\n",month_const_str[month],year);
+    for(int i=0; i<NO_DAY; i++)
+    {
+        printf("%5s",day_const_str[i]);
+    }
+    printf("\n");
+    for(space=0; space<first_day; space++)
+    {
+        printf("     "); // 5 * space 
+    }
+    for(int day_count=1; day_count<=month_limit[month]; day_count++)
+    {
+        printf("%5d",day_count);
+        if((space+day_count)%7 == 0)
+            printf("\n");
+    }
+    if(leap_year && month==FEB)
+        printf("%5d", 29);
+    system("echo \x1B[0m");
 }
 
 void print_year(const int year)
 {
     printf("Later\n");
+}
+
+void print_help(void)
+{
+
 }
