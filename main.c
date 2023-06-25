@@ -14,6 +14,7 @@ int isLeapYear(const int year);
 int year_num(const char* year_str);
 int month_num(const char* month_str);
 int date_num(const int month, const char* date_str);
+void check_h_v(const char* str);
 int calc_day(const int year, const int month, const int date);
 void print_date(const int year, const int month, const int date);
 void print_month(const int year, const int month);
@@ -32,7 +33,10 @@ int main(const int argc, const char* argv[])
     case 2:
         year = year_num(argv[1]);
         if(year == ERR)
+        {
+            check_h_v(argv[1]);
             break;
+        }
         print_year(year);
         return 0;
     case 3:
@@ -126,6 +130,22 @@ int date_num(const int month, const char* date_str)
     return  date;
 }
 
+void check_h_v(const char* str)
+{
+    if((!strcmp(str,"-h")) || (!strcmp(str,"--help")))
+        {
+            print_help();
+            exit(0);
+        }
+        if((!strcmp(str,"-v")) || (!strcmp(str,"--version")))
+        {
+            system("echo \x1B[92m");
+            printf("Calendar Application\nVersion 1.0 (2023)\nFree Software by Thomas.");
+            system("echo \x1B[0m");
+            exit(0);
+        }
+}
+
 int calc_day(const int year, const int month, const int date)
 {
     int year_cal = (month<2) ? year-1 : year; 
@@ -163,7 +183,7 @@ void print_month(const int year, const int month)
     for(int day_count=1; day_count<=month_limit[month]; day_count++)
     {
         printf("%5d",day_count);
-        if((space+day_count)%7 == 0)
+        if(((space+day_count)%7 == 0) && (day_count!=month_limit[month]))
             printf("\n");
     }
     if(leap_year && month==FEB)
@@ -178,5 +198,15 @@ void print_year(const int year)
 
 void print_help(void)
 {
-
+    system("echo \x1B[92m");
+    printf("Usage :\x1B[93m");
+    printf("\tCalendar {Year}                : print out the calendar for that year\n");
+    printf("\t\t {Year} {Month}        : print out the month for that year\n");
+    printf("\t\t {Year} {Month} {Date} : print out the day of the week for that date\n");
+    system("echo \x1B[94m   +------------------------------------------------+\x1B[93m");
+    printf("\n{Month}\n");
+    printf("\t\"JAN\" |  1\n\t\"FEB\" |  2\n\t\"MAR\" |  3\n\t\"APR\" |  4\n");
+    printf("\t\"MAY\" |  5\n\t\"JUN\" |  6\n\t\"JUL\" |  7\n\t\"AUG\" |  8\n");
+    printf("\t\"SEP\" |  9\n\t\"OCT\" | 10\n\t\"NOV\" | 11\n\t\"DEC\" | 12\n");
+    system("echo \x1B[94m   +------------------------------------------------+\x1B[0m");   
 }
